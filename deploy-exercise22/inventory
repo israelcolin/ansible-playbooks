@@ -1,0 +1,6 @@
+[controlnode]
+localhost ansible_connection=local
+
+[intranetweb]
+node1
+node2
