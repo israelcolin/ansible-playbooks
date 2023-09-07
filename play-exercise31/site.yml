@@ -1,0 +1,22 @@
+---
+#This is the First Playbook
+- name: Play Setup Web Server
+  hosts: webservers
+  tasks:
+
+  - name: Deploy httpd
+    ansible.builtin.yum:
+      name: httpd
+      status: present
+
+  - name: Ensure exist file index.html 
+    ansible.builtin.copy:
+      src: files/index.html
+      dest: /var/www/html/index.html
+  
+  - name: Ensuere httpd Enabled
+    ansible.builtin.service:
+      name: httpd
+      state: started
+      enabled: true
+...
