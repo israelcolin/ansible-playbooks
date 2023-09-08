@@ -7,7 +7,7 @@
   - name: Deploy httpd
     ansible.builtin.yum:
       name: httpd
-      status: present
+      state: present
 
   - name: Ensure exist file index.html 
     ansible.builtin.copy:
