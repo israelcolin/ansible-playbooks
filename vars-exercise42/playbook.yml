@@ -1,0 +1,57 @@
+---
+- name: Install web Server
+  hosts: webservers
+  vars: 
+    - web_pkg: httpd
+    - firewall_pkg: firewalld
+    - web_service: httpd
+    - firewall_service: firewalld
+    - phyton_pkg: wget
+    - rule: http
+  become: yes
+  tasks:
+
+    - name: Ensure Service Installed
+      ansible.builtin.dnf:
+        name:
+          - "{{ web_pkg }}"
+          - "{{ firewall_pkg }}"
+        state: latest
+
+    - name: Ensure Web Service Running
+      ansible.builtin.service:
+        name: "{{ web_service }}"
+        state: started
+        enabled: yes
+
+    - name: Ensure Firewall Service Running
+      ansible.builtin.service:
+        name: "{{ firewall_service }}"
+        state: started
+        enabled: yes
+
+    - name: Copy Index html
+      ansible.builtin.copy:
+        content: 'Example web content'
+        dest: /var/www/html/index.html
+
+    - name: Enable Traffic for Http
+      ansible.posix.firewalld:
+        service: "{{ rule }}"
+        permanent: true
+        state: enabled
+        immediate: true
+
+- name: Check Web Serice 
+  hosts: localhost
+  tasks:
+  
+    - name: Ensure Response code 200
+      ansible.builtin.uri:
+        url: http://node2
+        method: GET
+        return_content: true
+        status_code: 200
+
+
+
