@@ -1,0 +1,15 @@
+---
+- name: Generate password
+  hosts: devservers
+  become: true
+  remote_user: automation
+  vars_files:
+    - secret.yml
+  tasks:
+    - name: Creating user from secret.yml
+      ansible.builtin.user:
+        name: "{{ username }}"
+        state: present
+        password: "{{ password }}"
+        shell: /bin/bash
+
